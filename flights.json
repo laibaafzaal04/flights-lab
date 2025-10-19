@@ -1,0 +1,144 @@
+[
+  {
+    "route": "LHE-JED",
+    "airline": "PIA",
+    "flightDate": "2026-01-15T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "15days",
+      "startTracking": "2025-07-15T00:00:00.000Z",
+      "lastTracked": "2025-12-15T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-10-15T00:00:00.000Z", "price": 500 },
+      { "date": "2025-11-15T00:00:00.000Z", "price": 480 },
+      { "date": "2025-12-15T00:00:00.000Z", "price": 450 }
+    ]
+  },
+  {
+    "route": "LHE-BKK",
+    "airline": "Thai Airways",
+    "flightDate": "2026-02-01T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "1week",
+      "startTracking": "2025-08-01T00:00:00.000Z",
+      "lastTracked": "2025-11-15T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-10-15T00:00:00.000Z", "price": 670 },
+      { "date": "2025-11-01T00:00:00.000Z", "price": 678 },
+      { "date": "2025-11-15T00:00:00.000Z", "price": 712 }
+    ]
+  },
+  {
+    "route": "SIN-BKK",
+    "airline": "Singapore Airlines",
+    "flightDate": "2026-03-10T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "15days",
+      "startTracking": "2025-09-10T00:00:00.000Z",
+      "lastTracked": "2025-10-01T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-09-01T00:00:00.000Z", "price": 140 },
+      { "date": "2025-10-01T00:00:00.000Z", "price": 130 }
+    ]
+  },
+  {
+    "route": "DXB-LHE",
+    "airline": "Emirates",
+    "flightDate": "2026-01-05T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "1week",
+      "startTracking": "2025-07-05T00:00:00.000Z",
+      "lastTracked": "2025-12-01T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-09-01T00:00:00.000Z", "price": 360 },
+      { "date": "2025-12-01T00:00:00.000Z", "price": 350 }
+    ]
+  },
+  {
+    "route": "JED-LHE",
+    "airline": "Saudia",
+    "flightDate": "2026-01-20T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "15days",
+      "startTracking": "2025-07-20T00:00:00.000Z",
+      "lastTracked": "2025-11-20T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-08-20T00:00:00.000Z", "price": 420 },
+      { "date": "2025-11-20T00:00:00.000Z", "price": 405 }
+    ]
+  },
+  {
+    "route": "LHE-JFK",
+    "airline": "Qatar Airways",
+    "flightDate": "2026-04-01T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "1week",
+      "startTracking": "2025-10-01T00:00:00.000Z",
+      "lastTracked": "2025-12-01T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-09-01T00:00:00.000Z", "price": 1000 },
+      { "date": "2025-12-01T00:00:00.000Z", "price": 950 }
+    ]
+  },
+  {
+    "route": "KHI-DXB",
+    "airline": "flydubai",
+    "flightDate": "2026-02-20T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "15days",
+      "startTracking": "2025-08-20T00:00:00.000Z",
+      "lastTracked": "2025-12-01T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-10-01T00:00:00.000Z", "price": 210 },
+      { "date": "2025-12-01T00:00:00.000Z", "price": 200 }
+    ]
+  },
+  {
+    "route": "LHE-SIN",
+    "airline": "Etihad",
+    "flightDate": "2026-03-15T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "1week",
+      "startTracking": "2025-09-15T00:00:00.000Z",
+      "lastTracked": "2025-11-01T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-09-01T00:00:00.000Z", "price": 800 },
+      { "date": "2025-11-01T00:00:00.000Z", "price": 790 }
+    ]
+  },
+  {
+    "route": "BKK-LHE",
+    "airline": "Thai Airways",
+    "flightDate": "2026-05-10T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "15days",
+      "startTracking": "2025-11-10T00:00:00.000Z",
+      "lastTracked": "2025-12-01T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-10-01T00:00:00.000Z", "price": 750 },
+      { "date": "2025-12-01T00:00:00.000Z", "price": 730 }
+    ]
+  },
+  {
+    "route": "LHE-MLE",
+    "airline": "SriLankan",
+    "flightDate": "2026-06-12T00:00:00.000Z",
+    "trackingConfig": {
+      "interval": "1week",
+      "startTracking": "2025-09-10T00:00:00.000Z",
+      "lastTracked": "2025-11-10T00:00:00.000Z"
+    },
+    "priceHistory": [
+      { "date": "2025-09-10T00:00:00.000Z", "price": 540 },
+      { "date": "2025-11-10T00:00:00.000Z", "price": 525 }
+    ]
+  }
+]
