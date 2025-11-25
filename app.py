@@ -7,40 +7,30 @@ import random
 
 app = Flask(__name__)
 
-# MongoDB Configuration
 app.config["MONGO_URI"] = "mongodb://localhost:27017/flightDB"
 mongo = PyMongo(app)
 db = mongo.db.flights
 
-# Create indexes
 db.create_index([("route", "text"), ("airline", "text")])
 db.create_index([("route", 1), ("airline", 1), ("flightDate", 1)], unique=True)
 
-# ============================================
-# AUTOMATION - Price Update Function
-# ============================================
 
 def get_new_price(avg_price):
-    """Simulate price change (±10 dollars)"""
     change = random.randint(-10, 10)
     return round(avg_price + change)
 
+
 def update_prices(interval):
-    """Update prices for flights with given interval"""
     flights = db.find({
         "trackingConfig.interval": interval,
         "flightDate": {"$gte": datetime.now()}
     })
     
     for flight in flights:
-        # Calculate average price
         prices = [p["price"] for p in flight["priceHistory"]]
         avg_price = sum(prices) / len(prices)
-        
-        # Generate new price
         new_price = get_new_price(avg_price)
-        
-        # Update flight
+
         db.update_one(
             {"_id": flight["_id"]},
             {
@@ -55,18 +45,16 @@ def update_prices(interval):
                 }
             }
         )
-        print(f"✅ Updated {flight['route']}: ${new_price}")
 
-# Schedule automated tasks
+        print(f"Updated {flight['route']}: ${new_price}")
+
+
 scheduler = BackgroundScheduler()
 scheduler.add_job(lambda: update_prices("15min"), 'interval', minutes=15)
 scheduler.add_job(lambda: update_prices("1week"), 'cron', day_of_week='sun', hour=0)
 scheduler.add_job(lambda: update_prices("15days"), 'cron', day='1,15', hour=0)
 scheduler.start()
 
-# ============================================
-# 📡 API ENDPOINTS
-# ============================================
 
 @app.route("/")
 def home():
@@ -85,14 +73,13 @@ def home():
     </ul>
     """
 
+
 @app.route("/seed")
 def seed():
-    """Load sample data from flights.json"""
     try:
         with open("flights.json", "r") as f:
             data = json.load(f)
         
-        # Convert date strings to datetime objects
         for flight in data:
             flight["flightDate"] = datetime.fromisoformat(flight["flightDate"])
             flight["trackingConfig"]["startTracking"] = datetime.fromisoformat(
@@ -115,24 +102,24 @@ def seed():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/flights")
 def get_flights():
-    """Get all flights"""
     try:
-        flights = list(db.find({}))  # Removed {"_id": 0}
+        flights = list(db.find({}))
         for f in flights:
-            f["_id"] = str(f["_id"])  # Convert ObjectId to string
+            f["_id"] = str(f["_id"])
         return jsonify({"success": True, "data": flights})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/flight/<flight_id>")
 def get_flight(flight_id):
-    """Get single flight by ID"""
     try:
         from bson.objectid import ObjectId
         flight = db.find_one({"_id": ObjectId(flight_id)}, {"_id": 0})
-        
+
         if not flight:
             return jsonify({"error": "Not found"}), 404
         
@@ -140,13 +127,12 @@ def get_flight(flight_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/flight", methods=["POST"])
 def add_flight():
-    """Add new flight"""
     try:
         data = request.json
         
-        # Convert date strings to datetime
         data["flightDate"] = datetime.fromisoformat(data["flightDate"])
         data["trackingConfig"]["startTracking"] = datetime.fromisoformat(
             data["trackingConfig"]["startTracking"]
@@ -162,9 +148,9 @@ def add_flight():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/flight/<flight_id>", methods=["PUT"])
 def update_flight(flight_id):
-    """Update flight"""
     try:
         from bson.objectid import ObjectId
         data = request.json
@@ -181,9 +167,9 @@ def update_flight(flight_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/flight/<flight_id>", methods=["DELETE"])
 def delete_flight(flight_id):
-    """Delete flight"""
     try:
         from bson.objectid import ObjectId
         result = db.delete_one({"_id": ObjectId(flight_id)})
@@ -195,9 +181,9 @@ def delete_flight(flight_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/time-series")
 def time_series():
-    """Get price history for a route"""
     try:
         route = request.args.get("route")
         if not route:
@@ -224,15 +210,14 @@ def time_series():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/search")
 def search():
-    """Hybrid search with ranking"""
     try:
         q = request.args.get("q", "")
         max_price = request.args.get("maxPrice")
         date = request.args.get("date")
         
-        # Find flights
         query = {}
         if q:
             query["$text"] = {"$search": q}
@@ -242,29 +227,22 @@ def search():
         
         for flight in flights:
             score = 0
-            
-            # Calculate average price
+
             prices = [p["price"] for p in flight["priceHistory"]]
             avg_price = sum(prices) / len(prices)
-            
-            # 1. Text match (40 points)
-            if q:
-                if q.lower() in flight["route"].lower() or q.lower() in flight["airline"].lower():
-                    score += 40
-            
-            # 2. Price check (30 points)
+
+            if q and (q.lower() in flight["route"].lower() or q.lower() in flight["airline"].lower()):
+                score += 40
+
             if max_price and avg_price <= float(max_price):
                 score += 30
-            
-            # 3. Date proximity (30 points)
+
             if date:
                 target_date = datetime.fromisoformat(date)
                 flight_date = flight["flightDate"]
                 days_diff = abs((flight_date - target_date).days)
-                date_score = max(0, 30 - (days_diff / 12))
-                score += date_score
-            
-            # Filter by price if specified
+                score += max(0, 30 - (days_diff / 12))
+
             if not max_price or avg_price <= float(max_price):
                 results.append({
                     "route": flight["route"],
@@ -275,7 +253,6 @@ def search():
                     "score": round(score, 1)
                 })
         
-        # Sort by score
         results.sort(key=lambda x: x["score"], reverse=True)
         
         return jsonify({
@@ -287,7 +264,8 @@ def search():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 if __name__ == "__main__":
-    print("🚀 Server running on http://localhost:3000")
-    print("🤖 Automated tracking is active")
+    print("Server running on http://localhost:3000")
+    print("Automated tracking is active")
     app.run(host="0.0.0.0", port=3000, debug=True)
